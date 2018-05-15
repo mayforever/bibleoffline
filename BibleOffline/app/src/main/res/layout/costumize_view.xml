@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <TextView
+        android:layout_width="240sp"
+        android:layout_height="wrap_content"
+        android:text="Setting :"
+        android:textSize="26dp"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <TextView
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:textSize="16dp"
+            android:text="Night Mode :"
+            android:layout_width="match_parent"/>
+        <ToggleButton
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:text="ToggleButton"
+            android:id="@+id/tbNightMode"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <TextView
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:text="Font Size :"
+            android:textSize="16dp"
+            android:id="@+id/tvFontSize"
+            android:layout_width="fill_parent"/>
+        <SeekBar
+            android:id="@+id/seekBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="40dp"
+            android:layout_marginTop="20dp"/>
+
+    </LinearLayout>
+
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="3dp"
+        android:background="#c0c0c0"/>
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="3dp"
+        android:background="#c0c0c0"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:clickable="true"
+            android:text="OK"
+            android:textAlignment="center"
+            android:textSize="26dp"
+            android:layout_width="fill_parent"
+            android:id="@+id/chooseOK"/>
+        <View
+            android:layout_width="3dp"
+            android:layout_height="fill_parent"
+            android:background="#c0c0c0"/>
+        <TextView
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:layout_weight="1"
+            android:text="Cancel"
+            android:textAlignment="center"
+            android:textSize="26dp"
+            android:layout_width="fill_parent"
+            android:id="@+id/chooseCancel"/>
+    </LinearLayout>
+
+
+</LinearLayout>
