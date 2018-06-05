@@ -10,7 +10,9 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
+import android.view.GestureDetector;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -20,6 +22,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
@@ -34,6 +37,7 @@ import com.mayforever.bibleoffline.dialog.ChooseTestamentDialog;
 import com.mayforever.bibleoffline.dialog.ChooseVersionDialog;
 import com.mayforever.bibleoffline.dialog.ChooseVersionToLoad;
 import com.mayforever.bibleoffline.dialog.SettingDialog;
+import com.mayforever.bibleoffline.listener.OnSwipeTouchListener;
 import com.mayforever.bibleoffline.raw.BookReference;
 import com.mayforever.bibleoffline.raw.DefaultColor;
 import com.mayforever.bibleoffline.raw.KeySharedPref;
@@ -43,25 +47,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.TreeMap;
-/**
- * Created by John Aaron C. Valencia on 4/2/2018.
- */
 
-/**
- * Copyright 2018 John Aaron C. Valencia
-
- Licensed under the Apache License, Version 2.0 (the "License");
- you may not use this file except in compliance with the License.
- You may obtain a copy of the License at
-
- http://www.apache.org/licenses/LICENSE-2.0
-
- Unless required by applicable law or agreed to in writing, software
- distributed under the License is distributed on an "AS IS" BASIS,
- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and
- limitations under the License.
- */
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener
         {
@@ -133,13 +119,14 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void inializedObject (){
+        // gestureDetector = new GestureDetector(MainActivity.this,MainActivity.this);
         this.mapTextview = new HashMap<Integer, TextView>();
         this.selectedVerse = new ArrayList<String>();
 
         this.sharedPreferences = getSharedPreferences("view", Context.MODE_PRIVATE);
 
         this.linearLayoutDetails = (LinearLayout) findViewById(R.id.ll_details);
-
+        // this.linearLayoutDetails.seton
 
         this.bookSpinner = (Spinner) findViewById(R.id.spinnerBook);
 //        initBookSpinner();
@@ -213,12 +200,13 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View view) {
                 String clipboardCopy = getBookSpinner().getSelectedItem().toString()+ " : " +
-                        getChapterSpinner().getSelectedItem().toString() + "\n\n\n";
+                        getChapterSpinner().getSelectedItem().toString() + "\n\n";
                 for(String index : selectedVerse){
                     TextView textView = mapTextview.get(Integer.parseInt(index));
-                    clipboardCopy+=textView.getText().toString() +"\n\n";
-                    selectedVerse.remove(index);
+                    clipboardCopy+=textView.getText().toString() +"\n";
+                    // selectedVerse.remove(index);
                 }
+                selectedVerse.clear();
                 ClipData clipData = ClipData.newPlainText("copy verse",clipboardCopy);
                 clipboardManager.setPrimaryClip(clipData);
                 initializeLLDetails();
@@ -442,6 +430,43 @@ public class MainActivity extends AppCompatActivity
                     }
                 }
             });
+            textView.setOnTouchListener(new OnSwipeTouchListener(MainActivity.this) {
+//                final int chapter = Integer.parseInt(chapterSpinner.getSelectedItem().toString());
+                @Override
+                public void onSwipeRight() {
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    if(0 == chapter-1 ){
+                        editor.putString(KeySharedPref.KEY_CHAPTER,chapterSpinner.getAdapter().getCount() +"");
+                    }else{
+                        editor.putString(KeySharedPref.KEY_CHAPTER,(chapter-1)+"");
+                    }
+                    editor.apply();
+                    initChapterSpinner();
+                }
+
+                @Override
+                public void onSwipeLeft() {
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    if(chapterSpinner.getAdapter().getCount() < chapter+1 ){
+                        editor.putString(KeySharedPref.KEY_CHAPTER,1+"");
+                    }else{
+                        editor.putString(KeySharedPref.KEY_CHAPTER,(chapter+1)+"");
+                    }
+                    editor.apply();
+                    initChapterSpinner();
+                }
+
+                @Override
+                public void onSwipeTop() {
+
+                }
+
+                @Override
+                public void onSwipeBottom() {
+
+                }
+            });
+
             this.linearLayoutDetails.addView(textView);
             mapTextview.put(pair.getKey(),textView);
         }
@@ -495,5 +520,7 @@ public class MainActivity extends AppCompatActivity
                     initChapterSpinner();
                 }
             }
+
+
         }
 
